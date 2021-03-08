@@ -52,10 +52,10 @@ module "db" {
 
   # All available versions: http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_MySQL.html#MySQL.Concepts.VersionMgmt
   engine         = "oracle-se2"
-  engine_version = "12.2.0.1.ru-2020-04.rur-2020-04.r1"
+  engine_version = "19.0.0.0.ru-2021-01.rur-2021-01.r1"
   license_model  = "license-included"
 
-  instance_class        = "db.t3.micro"
+  instance_class        = "db.t3.small"
   storage_type          = "gp3"
   allocated_storage     = 20
   max_allocated_storage = 100
@@ -81,18 +81,17 @@ module "db" {
 
   tags = var.tags
 
-  #   alert, audit, error, general, listener, slowquery, trace, postgresql (PostgreSQL), upgrade (PostgreSQL)
-  enabled_cloudwatch_logs_exports = ["audit", "general", "error", "slowquery"]
+  enabled_cloudwatch_logs_exports = ["alert", "audit", "listener", "oemagent", "trace"]
 
   # DB subnet group
   #   subnet_ids = database_subnet_group
   db_subnet_group_name = local.database_subnet_group
 
   # DB parameter group
-  family = "oracle-se2-12.2"
+  family = "oracle-se2-19"
 
   # DB option group
-  major_engine_version = "12.2"
+  major_engine_version = "19"
 
   # Snapshot name upon DB deletion
   final_snapshot_identifier = local.nick
