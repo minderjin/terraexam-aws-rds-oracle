@@ -56,7 +56,7 @@ module "db" {
   license_model  = "license-included"
 
   instance_class        = "db.t3.small"
-  storage_type          = "gp3"
+  storage_type          = "gp2"
   allocated_storage     = 20
   max_allocated_storage = 100
   storage_encrypted     = false
