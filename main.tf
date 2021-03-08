@@ -69,7 +69,7 @@ module "db" {
   iam_database_authentication_enabled = false
 
   vpc_security_group_ids = local.db_security_group_ids
-  availability_zone      = "ap-northeast-2a"
+  availability_zone      = "${var.region}a"
 
   maintenance_window = "Sat:19:00-Sat:21:00"
   backup_window      = "16:00-19:00"
