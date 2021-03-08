@@ -81,7 +81,8 @@ module "db" {
 
   tags = var.tags
 
-  enabled_cloudwatch_logs_exports = ["alert", "audit", "listener", "oemagent", "trace"]
+  # alert, audit, error, general, listener, slowquery, trace, postgresql (PostgreSQL), upgrade (PostgreSQL)
+  enabled_cloudwatch_logs_exports = ["alert", "audit", "listener", "trace"]
 
   # DB subnet group
   #   subnet_ids = database_subnet_group
