@@ -51,25 +51,25 @@ module "db" {
   identifier = local.nick
 
   # All available versions: http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_MySQL.html#MySQL.Concepts.VersionMgmt
-  engine            = "oracle-se2"
-  engine_version    = "12.2.0.1.ru-2020-04.rur-2020-04.r1"
-  license_model           = "license-included"
-    
-  instance_class    = "db.t3.micro"
-  storage_type            = "gp3"
-  allocated_storage = 20
-  max_allocated_storage   = 100
-  storage_encrypted = false
+  engine         = "oracle-se2"
+  engine_version = "12.2.0.1.ru-2020-04.rur-2020-04.r1"
+  license_model  = "license-included"
+
+  instance_class        = "db.t3.micro"
+  storage_type          = "gp3"
+  allocated_storage     = 20
+  max_allocated_storage = 100
+  storage_encrypted     = false
 
   # kms_key_id        = "arm:aws:kms:<region>:<account id>:key/<kms key id>"
-  name     = "${var.name}"
-  username = "admin"
-  password = "YourPwdShouldBeLongAndSecure!"
-  port     = "1521"
+  name                                = "${var.name}"
+  username                            = "admin"
+  password                            = "YourPwdShouldBeLongAndSecure!"
+  port                                = "1521"
   iam_database_authentication_enabled = false
-  
+
   vpc_security_group_ids = local.db_security_group_ids
-  availability_zone       = "ap-northeast-2a"
+  availability_zone      = "ap-northeast-2a"
 
   maintenance_window = "Sat:19:00-Sat:21:00"
   backup_window      = "16:00-19:00"
@@ -89,18 +89,18 @@ module "db" {
   db_subnet_group_name = local.database_subnet_group
 
   # DB parameter group
-  family = "oracle-se-12.2"
+  family = "oracle-se2-12.2"
 
   # DB option group
   major_engine_version = "12.2"
 
   # Snapshot name upon DB deletion
   final_snapshot_identifier = local.nick
-  
+
   # See here for support character sets https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Appendix.OracleCharacterSets.html
-  character_set_name      = "AL32UTF8"
+  character_set_name = "AL32UTF8"
 
   # Database Deletion Protection
   deletion_protection = false
-  
+
 }
