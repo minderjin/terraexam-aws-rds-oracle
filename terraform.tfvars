@@ -77,18 +77,18 @@ rds_parameters = []
 #  }
 #]
 
-rds_options = []
-#     {
-#       option_name = "Timezone"
+rds_options = [
+   {
+     option_name = "Timezone"
 
-#       option_settings = [
-#         {
-#           name  = "TIME_ZONE"
-#           value = "Asia/Seoul"
-#         },
-#       ]
-#     },
-#   ]
+     option_settings = [
+       {
+         name  = "TIME_ZONE"
+         value = "Asia/Seoul"
+       },
+     ]
+   },
+ ]
 
 # The default is 0. Valid Values: 0, 1, 5, 10, 15, 30, 60.
 rds_monitoring_interval = 60
