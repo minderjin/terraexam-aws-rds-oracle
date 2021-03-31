@@ -27,7 +27,7 @@ data "terraform_remote_state" "sg" {
 }
 
 locals {
-  nick = "${var.name}-mysql"
+  nick = "${var.name}-oracle"
 
   vpc_id                = data.terraform_remote_state.vpc.outputs.vpc_id
   vpc_cidr_block        = data.terraform_remote_state.vpc.outputs.vpc_cidr_block
@@ -36,10 +36,10 @@ locals {
   database_subnet_ids   = data.terraform_remote_state.vpc.outputs.database_subnets
   database_subnet_group = data.terraform_remote_state.vpc.outputs.database_subnet_group
 
-  bastion_security_group_ids = ["${data.terraform_remote_state.sg.outputs.bastion_security_group_id}"]
-  alb_security_group_ids     = ["${data.terraform_remote_state.sg.outputs.alb_security_group_id}"]
-  was_security_group_ids     = ["${data.terraform_remote_state.sg.outputs.was_security_group_id}"]
-  db_security_group_ids      = ["${data.terraform_remote_state.sg.outputs.db_security_group_id}"]
+  bastion_security_group_ids = [data.terraform_remote_state.sg.outputs.bastion_security_group_id]
+  alb_security_group_ids     = [data.terraform_remote_state.sg.outputs.alb_security_group_id]
+  was_security_group_ids     = [data.terraform_remote_state.sg.outputs.was_security_group_id]
+  db_security_group_ids      = [data.terraform_remote_state.sg.outputs.db_security_group_id]
 }
 
 #####
@@ -47,60 +47,60 @@ locals {
 #####
 module "db" {
   source = "terraform-aws-modules/rds/aws"
+  version = "2.34.0"
 
   identifier = local.nick
 
   # All available versions: http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_MySQL.html#MySQL.Concepts.VersionMgmt
-  engine         = "oracle-se2"
-  engine_version = "19.0.0.0.ru-2021-01.rur-2021-01.r1"
-  license_model  = "license-included"
+  engine         = var.rds_engine
+  engine_version = var.rds_engine_version
+  license_model  = var.rds_license_model
 
-  instance_class        = "db.t3.small"
-  storage_type          = "gp2"
-  allocated_storage     = 20
-  max_allocated_storage = 100
-  storage_encrypted     = false
+  instance_class        = var.rds_instance_class
+  storage_type          = var.rds_storage_type
+  allocated_storage     = var.rds_allocated_storage
+  max_allocated_storage = var.rds_max_allocated_storage
+  storage_encrypted     = var.rds_storage_encrypted
 
   # kms_key_id        = "arm:aws:kms:<region>:<account id>:key/<kms key id>"
-  name                                = "${var.name}"
-  username                            = "admin"
-  password                            = "YourPwdShouldBeLongAndSecure!"
-  port                                = "1521"
-  iam_database_authentication_enabled = false
-
+  name                                = var.rds_db_name
+  username                            = var.rds_username
+  password                            = var.rds_password
+  port                                = var.rds_port
+  iam_database_authentication_enabled = var.rds_iam_database_authentication_enabled
   vpc_security_group_ids = local.db_security_group_ids
   availability_zone      = "${var.region}a"
-
-  maintenance_window = "Sat:19:00-Sat:21:00"
-  backup_window      = "16:00-19:00"
-
-  multi_az = false
+  maintenance_window = var.rds_maintenance_window
+  backup_window      = var.rds_backup_window
+  multi_az = var.rds_multi_az
 
   # disable backups to create DB faster
-  backup_retention_period = 7
+  backup_retention_period = var.rds_backup_retention_period
 
   tags = var.tags
 
   # alert, audit, error, general, listener, slowquery, trace, postgresql (PostgreSQL), upgrade (PostgreSQL)
-  enabled_cloudwatch_logs_exports = ["alert", "audit", "listener", "trace"]
+  enabled_cloudwatch_logs_exports = var.rds_enabled_cloudwatch_logs_exports
 
   # DB subnet group
-  #   subnet_ids = database_subnet_group
-  db_subnet_group_name = local.database_subnet_group
+  # db_subnet_group_name = local.database_subnet_group
+  create_db_subnet_group = true
+  subnet_ids = local.database_subnet_ids
 
   # DB parameter group
-  family = "oracle-se2-19"
+  family = var.rds_param_family
 
   # DB option group
-  major_engine_version = "19"
+  major_engine_version = var.rds_option_major_engine_version
 
   # Snapshot name upon DB deletion
-  final_snapshot_identifier = local.nick
+  # final_snapshot_identifier = join("", [var.name, "-last-", formatdate("YYYYMMMDDhhmmss", timestamp())])
+  skip_final_snapshot = var.rds_skip_final_snapshot
 
   # See here for support character sets https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Appendix.OracleCharacterSets.html
-  character_set_name = "AL32UTF8"
+  character_set_name = var.rds_character_set_name
 
   # Database Deletion Protection
-  deletion_protection = false
+  deletion_protection = var.rds_deletion_protection
 
 }
