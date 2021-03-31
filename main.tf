@@ -46,7 +46,7 @@ locals {
 # DB
 #####
 module "db" {
-  source = "terraform-aws-modules/rds/aws"
+  source  = "terraform-aws-modules/rds/aws"
   version = "2.34.0"
 
   identifier = local.nick
@@ -68,11 +68,11 @@ module "db" {
   password                            = var.rds_password
   port                                = var.rds_port
   iam_database_authentication_enabled = var.rds_iam_database_authentication_enabled
-  vpc_security_group_ids = local.db_security_group_ids
-  availability_zone      = "${var.region}a"
-  maintenance_window = var.rds_maintenance_window
-  backup_window      = var.rds_backup_window
-  multi_az = var.rds_multi_az
+  vpc_security_group_ids              = local.db_security_group_ids
+  availability_zone                   = "${var.region}a"
+  maintenance_window                  = var.rds_maintenance_window
+  backup_window                       = var.rds_backup_window
+  multi_az                            = var.rds_multi_az
 
   # disable backups to create DB faster
   backup_retention_period = var.rds_backup_retention_period
@@ -85,7 +85,7 @@ module "db" {
   # DB subnet group
   # db_subnet_group_name = local.database_subnet_group
   create_db_subnet_group = true
-  subnet_ids = local.database_subnet_ids
+  subnet_ids             = local.database_subnet_ids
 
   # DB parameter group
   family = var.rds_param_family
