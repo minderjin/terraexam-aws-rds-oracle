@@ -69,3 +69,39 @@ rds_character_set_name = "AL32UTF8"
 
 # Database Deletion Protection
 rds_deletion_protection = false
+
+rds_parameters = []
+#  {
+#    name  = "audit_trail"
+#    value = os | db [, extended] | xml [, extended]
+#  }
+#]
+
+rds_options = []
+#     {
+#       option_name = "Timezone"
+
+#       option_settings = [
+#         {
+#           name  = "TIME_ZONE"
+#           value = "Asia/Seoul"
+#         },
+#       ]
+#     },
+#   ]
+
+# The default is 0. Valid Values: 0, 1, 5, 10, 15, 30, 60.
+rds_monitoring_interval = 60
+
+# Create IAM role with a defined name that permits RDS to send enhanced monitoring metrics to CloudWatch Logs.
+rds_create_monitoring_role = true
+
+# Name of the IAM role which will be created when create_monitoring_role is enabled.
+rds_monitoring_role_name = "rds-monitoring-role-0"
+
+
+# Specifies whether Performance Insights are enabled
+rds_performance_insights_enabled = true
+
+# The amount of time in days to retain Performance Insights data. Either 7 (7 days) or 731 (2 years).
+rds_performance_insights_retention_period = 7

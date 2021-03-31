@@ -26,3 +26,11 @@ variable "rds_option_major_engine_version" {}
 variable "rds_skip_final_snapshot" {}
 variable "rds_character_set_name" {}
 variable "rds_deletion_protection" {}
+variable "rds_parameters" {}
+variable "rds_options" {}
+variable "rds_monitoring_interval" {}
+variable "rds_create_monitoring_role" {}
+variable "rds_monitoring_role_name" {}
+variable "rds_performance_insights_enabled" {}
+variable "rds_performance_insights_retention_period" {}
+
