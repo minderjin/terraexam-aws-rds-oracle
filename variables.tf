@@ -33,4 +33,3 @@ variable "rds_create_monitoring_role" {}
 variable "rds_monitoring_role_name" {}
 variable "rds_performance_insights_enabled" {}
 variable "rds_performance_insights_retention_period" {}
-
